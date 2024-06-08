@@ -1,4 +1,5 @@
 import random
+import time
 from collections import deque
 
 import gymnasium
@@ -103,6 +104,7 @@ class dqn_agent:
     def learn(self, episodes):
 
         current_episode_rewards = deque(maxlen=self.current_episode_queue_max)
+        step_elapsed_time = deque(maxlen=20)
 
         for episode in range(episodes):
             state = np.array([self.env.reset()[0]])
@@ -111,7 +113,7 @@ class dqn_agent:
             total_reward = 0
 
             while not done:
-#                 print(f"State: {state}")
+                step_start_time = time.time()
                 action = self.get_action(state)
                 next_state, reward, done, _, _ = self.env.step(action)
                 next_state = np.reshape(next_state, [1, self.observation_space.shape[0]])
@@ -122,6 +124,8 @@ class dqn_agent:
                 if len(self.replay_buffer) >= self.train_start:
                     self.train_model()
 
+                step_elapsed_time.append(time.time() - step_start_time)
+
             self.update_target_model()
             self.learn_history.append((episode, total_reward, self.epsilon))
             current_episode_rewards.append(total_reward)
@@ -129,5 +133,5 @@ class dqn_agent:
                 np.mean(current_episode_rewards) > self.min_train_end_reward_rate * self.max_episode_reward):
                 break
 
-            print(f"Episode: {episode}, Total Reward: {total_reward}, Epsilon: {self.epsilon}, Buffer Size: {len(self.replay_buffer)}, {self.current_episode_queue_max}current_episodes_rewards_mean: {np.mean(current_episode_rewards)}")
+            print(f"Episode: {episode}, Total Reward: {total_reward}, Epsilon: {self.epsilon}, Buffer Size: {len(self.replay_buffer)}, {self.current_episode_queue_max}current_episodes_rewards_mean: {np.mean(current_episode_rewards)}, step_elapsed_time: {np.mean(step_elapsed_time)}")
         return self.learn_history
