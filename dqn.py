@@ -133,5 +133,5 @@ class dqn_agent:
                 np.mean(current_episode_rewards) > self.min_train_end_reward_rate * self.max_episode_reward):
                 break
 
-            print(f"Episode: {episode}, Total Reward: {total_reward}, Epsilon: {self.epsilon}, Buffer Size: {len(self.replay_buffer)}, {self.current_episode_queue_max}current_episodes_rewards_mean: {np.mean(current_episode_rewards)}, step_elapsed_time: {np.mean(step_elapsed_time)}")
+            print(f"Episode: {episode}, Total Reward: {total_reward}, Epsilon: {round(self.epsilon, 2)}, Buffer Size: {len(self.replay_buffer)}, {self.current_episode_queue_max}current_episodes_rewards_mean: {round(np.mean(current_episode_rewards),0)}, step_elapsed_time: {np.mean(step_elapsed_time)}")
         return self.learn_history

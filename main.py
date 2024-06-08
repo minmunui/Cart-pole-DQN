@@ -31,4 +31,5 @@ ax2.set_ylim(0, 1.1)
 ax2.set_ylabel('epsilon', color='b')
 
 plt.title(f"DQN Agent Learning batch_size={BATCH_SIZE}, replay_buffer_size={REPLAY_BUFFER_SIZE}")
+plt.savefig("DQN Agent Learning batch_size={BATCH_SIZE}, replay_buffer_size={REPLAY_BUFFER_SIZE}")
 plt.show()
